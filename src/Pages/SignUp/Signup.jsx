@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -15,7 +16,22 @@ const Signup = () => {
     createUser(data.email, data.password)
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        const userInfo = { displayName: data.name };
+        console.log(userInfo);
+
+        updateUser(userInfo)
+          .then(() => {
+            toast.success("User name updated successfully");
+          })
+          .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then(() => {
+        toast.success("Successfully signed in with google.");
       })
       .catch((e) => console.log(e));
   };
@@ -104,7 +120,10 @@ const Signup = () => {
         </p>
         <div className="divider">OR</div>
         <div>
-          <button className="btn btn-outline w-full">
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn btn-outline w-full"
+          >
             CONTINUE WITH GOOGLE
           </button>
         </div>

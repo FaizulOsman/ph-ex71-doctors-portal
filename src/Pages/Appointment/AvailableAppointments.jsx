@@ -40,7 +40,7 @@ const AvailableAppointments = ({ selectedDate }) => {
             <label
               disabled={appointmentOption.slots.length === 0}
               onClick={() => setTreatment(appointmentOption)}
-              htmlFor="booking-modal"
+              htmlhtmlFor="booking-modal"
               className="mt-3 btn btn-primary bg-gradient-to-r from-primary to-secondary text-white"
             >
               Book Appointment

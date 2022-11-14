@@ -1,11 +1,18 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
-  const { logIn } = useContext(AuthContext);
+  const { logIn, googleSignIn, resetPassword } = useContext(AuthContext);
   const [loginError, setLoginError] = useState("");
+  const [emailBlur, setEmailBlur] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
+
   const {
     register,
     handleSubmit,
@@ -18,11 +25,33 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
+        navigate(from, { replace: true });
       })
       .catch((e) => {
         console.log(e);
         setLoginError(e.message);
       });
+  };
+
+  const handleEmailOnBlur = (e) => {
+    setEmailBlur(e.target.value);
+  };
+
+  const handleResetPassword = () => {
+    const email = emailBlur;
+    resetPassword(email)
+      .then(() => {
+        toast.success(`Please check your email "${email}" to reset password.`);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then(() => {
+        toast.success("Successfully signed in with google.");
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -40,6 +69,7 @@ const Login = () => {
               })}
               type="email"
               placeholder="Email"
+              onBlur={handleEmailOnBlur}
               className="input input-bordered"
             />
             {errors.email && (
@@ -70,7 +100,10 @@ const Login = () => {
               </p>
             )}
             <label className="label">
-              <Link href="#" className="label-text-alt link link-hover">
+              <Link
+                onClick={handleResetPassword}
+                className="label-text-alt link link-hover"
+              >
                 Forgot password?
               </Link>
             </label>
@@ -90,7 +123,10 @@ const Login = () => {
         </p>
         <div className="divider">OR</div>
         <div>
-          <button className="btn btn-outline w-full">
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn btn-outline w-full"
+          >
             CONTINUE WITH GOOGLE
           </button>
         </div>

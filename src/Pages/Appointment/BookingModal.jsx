@@ -1,8 +1,10 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
   const { name, slots } = treatment;
+  const { user } = useContext(AuthContext);
 
   const handleBooking = (e) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
       <div className="modal">
         <div className="modal-box relative">
           <label
-            htmlFor="booking-modal"
+            htmlhtmlFor="booking-modal"
             className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
@@ -61,7 +63,17 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
                 <input
                   name="name"
                   type="text"
+                  defaultValue={user?.displayName}
                   placeholder="Full Name"
+                  className="input input-bordered"
+                />
+              </div>
+              <div className="form-control">
+                <input
+                  name="email"
+                  type="email"
+                  defaultValue={user?.email}
+                  placeholder="Email"
                   className="input input-bordered"
                 />
               </div>
@@ -70,14 +82,6 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
                   name="phone"
                   type="text"
                   placeholder="Phone Number"
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control">
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
                   className="input input-bordered"
                 />
               </div>
