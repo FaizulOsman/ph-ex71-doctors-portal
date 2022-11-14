@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import appointment from "../assets/images/appointment.png";
+import appointment from "../../assets/images/appointment.png";
 
 const ContactUsSection = () => {
   return (

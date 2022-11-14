@@ -1,8 +1,8 @@
 import React from "react";
-import fluoride from "../assets/images/fluoride.png";
-import cavity from "../assets/images/cavity.png";
-import whitening from "../assets/images/whitening.png";
-import treatment from "../assets/images/treatment.png";
+import fluoride from "../../assets/images/fluoride.png";
+import cavity from "../../assets/images/cavity.png";
+import whitening from "../../assets/images/whitening.png";
+import treatment from "../../assets/images/treatment.png";
 
 const ServicesSection = () => {
   const servicesCard = [

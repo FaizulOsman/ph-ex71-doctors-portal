@@ -1,9 +1,9 @@
 import React from "react";
 import "./Banner.css";
-import bannerImage from "../assets/images/chair.png";
-import clock from "../assets/icons/clock.svg";
-import marker from "../assets/icons/marker.svg";
-import phone from "../assets/icons/phone.svg";
+import bannerImage from "../../assets/images/chair.png";
+import clock from "../../assets/icons/clock.svg";
+import marker from "../../assets/icons/marker.svg";
+import phone from "../../assets/icons/phone.svg";
 
 const Banner = () => {
   const bannerCard = [

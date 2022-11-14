@@ -1,5 +1,5 @@
 import React from "react";
-import bannerImage from "../assets/images/chair.png";
+import bannerImage from "../../assets/images/chair.png";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
