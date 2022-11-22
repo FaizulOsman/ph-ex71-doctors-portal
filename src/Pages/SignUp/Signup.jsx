@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
+import useToken from "../../hooks/useToken";
 
 const Signup = () => {
   const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
@@ -11,21 +12,43 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [token] = useToken(createdUserEmail);
+  if (token) {
+    navigate("/");
+  }
 
   const handleSignIn = (data) => {
     createUser(data.email, data.password)
       .then((result) => {
         const user = result.user;
         const userInfo = { displayName: data.name };
-        console.log(userInfo);
 
         updateUser(userInfo)
           .then(() => {
-            toast.success("User name updated successfully");
+            saveUser(data?.name, data?.email);
+            toast.success("User created successfully");
           })
           .catch((e) => console.log(e));
       })
       .catch((e) => console.log(e));
+  };
+
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch("https://ph-ex71-doctors-portal-server.vercel.app/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setCreatedUserEmail(email);
+      });
   };
 
   const handleGoogleSignIn = () => {

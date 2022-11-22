@@ -20,6 +20,16 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
 
+  const [theme, setTheme] = useState(false);
+  useEffect(() => {
+    setTheme(JSON.parse(window.localStorage.getItem("theme") || "false"));
+  }, []);
+
+  const handleThemeChange = () => {
+    setTheme(!theme);
+    window.localStorage.setItem("theme", JSON.stringify(!theme));
+  };
+
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -68,6 +78,8 @@ const AuthProvider = ({ children }) => {
     loading,
     googleSignIn,
     resetPassword,
+    theme,
+    handleThemeChange,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

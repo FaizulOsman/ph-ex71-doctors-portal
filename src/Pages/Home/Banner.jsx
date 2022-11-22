@@ -58,7 +58,7 @@ const Banner = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-24">
         {bannerCard.map((card) => (
-          <div key={card.id} className={card.class}>
+          <div key={card?.id} className={card.class}>
             <img src={card.icon} alt="" />
             <div className="text-center sm:text-left">
               <h4 className="text-xl font-semibold">{card.name}</h4>

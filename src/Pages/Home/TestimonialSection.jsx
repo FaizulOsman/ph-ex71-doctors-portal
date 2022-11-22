@@ -45,7 +45,7 @@ const TestimonialSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-20">
         {testimonialCard.map((card) => (
-          <div key={card.id} className="shadow-xl rounded-lg p-8">
+          <div key={card?.id} className="shadow-xl rounded-lg p-8">
             <p>{card.description}</p>
             <div className="flex mt-8">
               <div className="avatar">

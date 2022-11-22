@@ -37,7 +37,7 @@ const ServicesSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
         {servicesCard.map((card) => (
-          <div key={card.id} className="text-center shadow-xl rounded-xl p-6">
+          <div key={card?.id} className="text-center shadow-xl rounded-xl p-6">
             <img className="w-24 mx-auto" src={card.image} alt="" />
             <h4 className="mt-6 mb-2 text-xl font-semibold">{card.name}</h4>
             <p>{card.description}</p>

@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   daisyui: {
-    darkMode: "class",
     themes: [
       {
         mytheme: {
@@ -16,6 +15,7 @@ module.exports = {
           error: "#F87272",
         },
       },
+      "night",
     ],
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],

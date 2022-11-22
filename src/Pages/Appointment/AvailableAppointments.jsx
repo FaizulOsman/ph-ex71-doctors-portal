@@ -1,16 +1,28 @@
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Spinner from "../../components/Spinner";
 import BookingModal from "./BookingModal";
 
 const AvailableAppointments = ({ selectedDate }) => {
-  const [appointmentOptions, setAppointmentOptions] = useState([]);
   const [treatment, setTreatment] = useState(null);
+  const date = format(selectedDate, "PP");
 
-  useEffect(() => {
-    fetch("appointmentOptions.json")
-      .then((res) => res.json())
-      .then((data) => setAppointmentOptions(data));
-  }, []);
+  const {
+    data: appointmentOptions = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["appointmentOptions", date],
+    queryFn: () =>
+      fetch(
+        `https://ph-ex71-doctors-portal-server.vercel.app/appointmentOptions?date=${date}`
+      ).then((res) => res.json()),
+  });
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <section className="mt-10">
@@ -21,26 +33,27 @@ const AvailableAppointments = ({ selectedDate }) => {
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-24">
         {appointmentOptions.map((appointmentOption) => (
           <div
-            key={appointmentOption._id}
+            key={appointmentOption?._id}
             className="rounded-lg shadow-lg text-center py-10"
           >
             <h4 className="text-2xl font-bold text-primary">
               {appointmentOption.name}
             </h4>
             <p className="mt-2">
-              {appointmentOption.slots.length > 0
-                ? appointmentOption.slots[0]
+              {appointmentOption?.slots?.length > 0
+                ? appointmentOption?.slots[0]
                 : "Try another day"}
             </p>
             <p className="mt-2">
-              {appointmentOption.slots.length}{" "}
-              {appointmentOption.slots.length > 0 ? "spaces" : "space"}{" "}
+              {appointmentOption?.slots?.length}{" "}
+              {appointmentOption?.slots?.length > 0 ? "spaces" : "space"}{" "}
               available
             </p>
+            <p>Price: ${appointmentOption?.price}</p>
             <label
-              disabled={appointmentOption.slots.length === 0}
+              disabled={appointmentOption?.slots?.length === 0}
               onClick={() => setTreatment(appointmentOption)}
-              htmlhtmlFor="booking-modal"
+              htmlFor="booking-modal"
               className="mt-3 btn btn-primary bg-gradient-to-r from-primary to-secondary text-white"
             >
               Book Appointment
@@ -53,6 +66,7 @@ const AvailableAppointments = ({ selectedDate }) => {
           setTreatment={setTreatment}
           treatment={treatment}
           selectedDate={selectedDate}
+          refetch={refetch}
         ></BookingModal>
       )}
     </section>

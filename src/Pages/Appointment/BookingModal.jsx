@@ -1,9 +1,10 @@
 import { format } from "date-fns";
 import React, { useContext } from "react";
+import toast from "react-hot-toast";
 import { AuthContext } from "../../contexts/AuthProvider";
 
-const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
-  const { name, slots } = treatment;
+const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
+  const { name, slots, price } = treatment;
   const { user } = useContext(AuthContext);
 
   const handleBooking = (e) => {
@@ -18,13 +19,30 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
       appointmentDate: date,
       treatment: name,
       slot,
+      price,
       patientName,
       phone,
       email,
     };
 
-    setTreatment(null);
-    console.log(booking);
+    fetch("https://ph-ex71-doctors-portal-server.vercel.app/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          setTreatment(null);
+          toast.success("Booking confirmed");
+          refetch();
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
 
   return (
@@ -33,12 +51,14 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
       <div className="modal">
         <div className="modal-box relative">
           <label
-            htmlhtmlFor="booking-modal"
+            htmlFor="booking-modal"
             className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
           </label>
-          <h3 className="text-2xl font-semibold">{name}</h3>
+          <h3 className="text-2xl font-semibold">
+            {name} <span className="text-primary font-bold">${price}</span>
+          </h3>
           <div className="card flex-shrink-0 w-full">
             <form onSubmit={handleBooking} className="card-body">
               <div className="form-control">
@@ -53,7 +73,7 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
                 name="slot"
                 className="select select-bordered bg-gray-300"
               >
-                {slots.map((slot, index) => (
+                {slots?.map((slot, index) => (
                   <option key={index} value={slot}>
                     {slot}
                   </option>
