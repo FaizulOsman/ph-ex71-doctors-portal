@@ -2,7 +2,7 @@ import "./App.css";
 import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes/Routes";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthProvider";
 
 function App() {

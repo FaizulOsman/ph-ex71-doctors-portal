@@ -14,10 +14,13 @@ const AvailableAppointments = ({ selectedDate }) => {
     isLoading,
   } = useQuery({
     queryKey: ["appointmentOptions", date],
-    queryFn: () =>
-      fetch(
+    queryFn: async () => {
+      const res = await fetch(
         `https://ph-ex71-doctors-portal-server.vercel.app/appointmentOptions?date=${date}`
-      ).then((res) => res.json()),
+      );
+      const data = await res.json();
+      return data;
+    },
   });
 
   if (isLoading) {
